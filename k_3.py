@@ -12,23 +12,12 @@ def check_with_coeffs(coeffs):
     # check condition (2) by iterating through all 2-colorings of all graphs with up to 9 vertices
 
     mat = np.load('k3_subg_counts_9v2.npy')
-    for i in mat[:100]:
-        print(i)
-    for i in mat[200000:200050]:
-        print(i)
 
     new_mat = np.array(mat[:19])/2**9
     # graphs contains all unlabeled graphs G_9 with up to 9 vertices ranked in increasing order of edges
     # some might not be 2 colorable
 
     graphs = sorted(nx.read_graph6("graph9.g6"), key = lambda G: G.number_of_edges())[:len(mat)]
-    counter = 0
-    for g in graphs:
-        if g.number_of_edges() < 8:
-            counter+=1
-        else:
-            print("number of graphs less than 8 edges", counter)
-            return
     print("Checking ",  len(graphs), " constraints.")
     max_found = 0
     for i, G in enumerate(graphs):
@@ -40,6 +29,7 @@ def check_with_coeffs(coeffs):
         # hence mat[i][j] = the number of G_q which is a subset of G_9[i] such that G_q ~ H[j]
         s = abs(sum(mat[i][j] * coeffs[j] for j in range(len(coeffs))))
         if s > max_found:
+            print("s=",s,"max_found=",max_found)
             # 2^9 * 1000, 1000 because all coeff are scaled by 1000
             if s != 512000: # if the H is not empty
                 max_found = s
@@ -124,6 +114,6 @@ if __name__ == "__main__":
     # print()
     # print ("Bounding graphs with more than 9 vertices... ")
     # count_bounds_with_coeffs(C_TILDE_INT)
-    print([DC(vertices(j))/168 for j in range(len(COEFFS))])
+    # print([DC(vertices(j))/168 for j in range(len(COEFFS))])
 
    
