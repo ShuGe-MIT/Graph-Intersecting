@@ -4,8 +4,8 @@ from scipy.optimize import linprog
 from math import comb
 
 q = 2
-V = 9
-delta = 0.125
+V = 9 # TODO: try V = 8 ??
+delta = 0.125 # TODO: how far we can push delta to ??
 
 ALL9GRAPHS = sorted(nx.read_graph6("graph9.g6"), key = lambda G: G.number_of_edges())[:19] # 274668
 ALLEDGES = np.array([g.number_of_edges() for g in ALL9GRAPHS])
@@ -32,21 +32,27 @@ def prume(G, C):
     g.remove_nodes_from(list(nx.isolates(g)))
     return g
 
-def count_iso_colorings(G, B):
+def count_iso_colorings(G, V, B):
     # B = nx.Graph(B.edges())
     return np.count_nonzero(np.array([nx.is_isomorphic(B, prume(G, C)) for C in all_colorings(V, q)]))
 
-ISO_COUNT = np.array([[count_iso_colorings(ALL9GRAPHS[i], nx.Graph(ALL9BIPARTITE[j].edges())) for j in range(len(ALL9BIPARTITE))] for i in range(len(ALL9GRAPHS))])/2**9
+ISO_COUNT = np.array([[count_iso_colorings(ALL9GRAPHS[i], V, nx.Graph(ALL9BIPARTITE[j].edges())) for j in range(len(ALL9BIPARTITE))] for i in range(len(ALL9GRAPHS))])/2**9
 print(ISO_COUNT.sum(axis = 1))
 
 def check_condition_2(coefs):
     sums = np.apply_along_axis(lambda x: np.sum(x*coefs), 1, ISO_COUNT[:9])
     return all(np.abs(sums)[1:] <=1) and sums[0] == 7
 
-def DC(x, q = 2, V = 9):
-    return max([comb(n,V)/(q**(n-V)*comb(n-x,V-x)) for n in range(V+1,max(2*x+1,V+2))]) # TODO: upper bound is 2*x??
+def nodes(G):
+    counter=0
+    for v in G.nodes():
+        if G.degree(v) > 0: counter+=1
+    return counter
 
-DCs = np.array([DC(g.number_of_edges()) for g in ALL9BIPARTITE])
+def DC(x, q = 2, V = 9):
+    return max([comb(n,V)/(q**(n-V)*comb(n-x,V-x)) for n in range(V+1,max(2*x+1,V+2))]) 
+
+DCs = np.array([DC(nodes(g), V = V) for g in ALL9BIPARTITE])
 print(DCs)
 
 def check_condition_3(coefs):
@@ -75,6 +81,7 @@ def coef_tilde(coefs):
     [18,13,15,17]]
     return [max([abs(coefs[i]) for i in avail[j]]) for j in range(len(coefs))]
 
+all_avail_coeff = []
 # all disconnected H have 0 coefficients
 for x1 in np.arange(-5,0,1):
     for x2 in np.arange(-2,2,1):
@@ -89,7 +96,7 @@ for x1 in np.arange(-5,0,1):
                                     res=check_condition_2(coefs)
                                     res2 = check_condition_3(coef_tilde(coefs))
                                     if res and res2:
-                                        print(coefs)
+                                        all_avail_coeff.append(res)
 
 # # LP_coeff attempt (incomplete)
 # LP_coeff = np.repeat(ISO_COUNT, 2, axis = 0)

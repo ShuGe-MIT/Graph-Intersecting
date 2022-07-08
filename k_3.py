@@ -109,18 +109,19 @@ def vertices(ind):
 if __name__ == "__main__":
     
     COEFFS = [7.0, -5.0, -1.0, 1.7, 3.0, 0.0, 0.0, 0.3, 0.0, -0.2, 0.0, 0.0, 0.0, 0.0, -3.7, 0.0, 0.0, 0.0, -0.75]
-    # computed from the maximum value of |c_H'| over all graphs H' which may be transformed to H by repeatedly 
-    # identifying paris of disconnected vertices.
-    COEFFS_TILDE = [7.0, 5.0, 1.7, 1.7, 3.0, 0.0, 0.0, 0.3, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 3.7, 0.0, 0.0, 0.0, 0.75]
-    # TODO: is COEFFS_TILDE = [7.0, 5.0, 1.0, ...] ?? 
-    print(len(COEFFS))
+    # # computed from the maximum value of |c_H'| over all graphs H' which may be transformed to H by repeatedly 
+    # # identifying paris of disconnected vertices.
+    # COEFFS_TILDE = [7.0, 5.0, 1.7, 1.7, 3.0, 0.0, 0.0, 0.3, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 3.7, 0.0, 0.0, 0.0, 0.75]
+    # # TODO: is COEFFS_TILDE = [7.0, 5.0, 1.0, ...] ?? 
+    # print(len(COEFFS))
 
-    C_INT = [int(1000 * x) for x in COEFFS]
-    C_TILDE_INT = [int(1000 * x) for x in COEFFS_TILDE]
-    print ("Checking graphs up to 9 vertices... ")
-    check_with_coeffs(C_INT)
-    print()
-    print ("Bounding graphs with more than 9 vertices... ")
-    count_bounds_with_coeffs(C_TILDE_INT)
+    # C_INT = [int(1000 * x) for x in COEFFS]
+    # C_TILDE_INT = [int(1000 * x) for x in COEFFS_TILDE]
+    # print ("Checking graphs up to 9 vertices... ")
+    # check_with_coeffs(C_INT)
+    # print()
+    # print ("Bounding graphs with more than 9 vertices... ")
+    # count_bounds_with_coeffs(C_TILDE_INT)
+    print([DC(vertices(j))/168 for j in range(len(COEFFS))])
 
    

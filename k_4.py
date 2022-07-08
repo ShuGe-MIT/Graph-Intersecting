@@ -28,7 +28,13 @@ class GraphVisualization:
         G.add_edges_from(self.visual)
         nx.draw_networkx(G)
         plt.show()
+def plot_graph(g):
+        G = GraphVisualization()
+        for edge in g.edges():
+            G.addEdge(edge[0], edge[1])
+        G.visualize()
 
+        
 q = 3
 
 
@@ -173,11 +179,6 @@ if __name__ == "__main__":
     # This agrees with the definition in the paper for all H with c_H != 0.
     # pruned_atlas(n) returns out a representative from each of the first n equivalence classes.
     print ("First 10 equivalence classes: ")
-    def plot_graph(g):
-        for edge in g.edges():
-            G = GraphVisualization()
-            G.addEdge(edge[0], edge[1])
-        G.visualize()
 
     for G in pruned_atlas(50)[20:]:
         plot_graph(G)
