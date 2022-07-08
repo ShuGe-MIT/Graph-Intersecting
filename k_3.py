@@ -12,8 +12,10 @@ def check_with_coeffs(coeffs):
     # check condition (2) by iterating through all 2-colorings of all graphs with up to 9 vertices
 
     mat = np.load('k3_subg_counts_9v2.npy')
-    for i in mat[:19]:
-        print(i/2**9*100)
+    for i in mat[:100]:
+        print(i)
+    for i in mat[200000:200050]:
+        print(i)
 
     new_mat = np.array(mat[:19])/2**9
     # graphs contains all unlabeled graphs G_9 with up to 9 vertices ranked in increasing order of edges
@@ -115,10 +117,10 @@ if __name__ == "__main__":
     # # TODO: is COEFFS_TILDE = [7.0, 5.0, 1.0, ...] ?? 
     # print(len(COEFFS))
 
-    # C_INT = [int(1000 * x) for x in COEFFS]
+    C_INT = [int(1000 * x) for x in COEFFS]
     # C_TILDE_INT = [int(1000 * x) for x in COEFFS_TILDE]
     # print ("Checking graphs up to 9 vertices... ")
-    # check_with_coeffs(C_INT)
+    check_with_coeffs(C_INT)
     # print()
     # print ("Bounding graphs with more than 9 vertices... ")
     # count_bounds_with_coeffs(C_TILDE_INT)
